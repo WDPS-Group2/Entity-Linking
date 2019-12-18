@@ -21,7 +21,7 @@ example
 def search(domain, query):
     url = 'http://%s/freebase/label/_search' % domain
     try:
-        response = requests.get(url, params={'q': query, 'size':10})
+        response = requests.get(url, params={'q': query, 'size':20})
     except:
         return {}
     id_score_labels = {}
