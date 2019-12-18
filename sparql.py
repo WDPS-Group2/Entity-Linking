@@ -1,5 +1,13 @@
 import requests, json
 
+QUERY="""
+    select distinct ?abstract where {
+    ?s <http://www.w3.org/2002/07/owl#sameAs> <http://rdf.freebase.com/ns/%s> .
+    ?s <http://www.w3.org/2002/07/owl#sameAs> ?o .
+    ?o <http://dbpedia.org/ontology/abstract> ?abstract .
+}"""
+# NOTWORK:filter langMatches( lang(?abstract), "EN"  )
+
 def sparql(domain, query):
     url = 'http://%s/sparql' % domain
     response = requests.post(url, data={'print': True, 'query': query})
@@ -12,16 +20,27 @@ def sparql(domain, query):
                 if abstract[-3:-1] == "en":
                     return abstract
         except Exception as e:
-            print(response)
+            print(reponse)
             raise e
+
+def query_abstract(domain, freebaseId):
+    key = freebaseId[1:].replace("/",".")
+    q = QUERY % key
+    try:
+        abstract = sparql(domain,q)
+        return abstract
+    except Exception as e:
+        return None
 
 
 if __name__ == '__main__':
     import sys
     try:
-        _, DOMAIN, QUERY = sys.argv
+        _, DOMAIN = sys.argv
     except Exception as e:
         print('Usage: python sparql.py DOMAIN QUERY')
         sys.exit(0)
-
-    sparql(DOMAIN, QUERY)
+    key = "/m/0br5f6"
+    k = key[1:].replace("/",".")
+    q = QUERY % k
+    print(sparql(DOMAIN,q))
