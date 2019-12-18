@@ -33,14 +33,13 @@ def query_abstract(domain, freebaseId):
         return None
 
 
+
 if __name__ == '__main__':
     import sys
     try:
-        _, DOMAIN = sys.argv
+        _, DOMAIN, QUERY = sys.argv
     except Exception as e:
         print('Usage: python sparql.py DOMAIN QUERY')
         sys.exit(0)
-    key = "/m/0br5f6"
-    k = key[1:].replace("/",".")
-    q = QUERY % k
-    print(sparql(DOMAIN,q))
+
+    sparql(DOMAIN, QUERY)
